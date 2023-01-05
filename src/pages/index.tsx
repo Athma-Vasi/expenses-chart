@@ -2,6 +2,8 @@ import { type NextPage } from "next";
 import { useWindowInnerSize } from "../hooks/useWindowInnerSize";
 import logo from "../../public/logo.svg";
 import Image from "next/image";
+import fsPromises from "fs/promises";
+import path from "path";
 
 const Home: NextPage = () => {
   const { width = 0 } = useWindowInnerSize();
