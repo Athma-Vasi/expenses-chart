@@ -11,9 +11,9 @@ module.exports = {
         myCream: "hsl(27, 66%, 92%)",
         paleOrange: "hsl(33, 100%, 98%)",
       },
-    },
-    fontFamily: {
-      dmSans: ["DM Sans", "sans-serif"],
+      fontFamily: {
+        dmSans: ["DM Sans", "sans-serif"],
+      },
     },
     screens: {
       sm: "375px",
