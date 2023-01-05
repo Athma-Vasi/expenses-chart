@@ -8,5 +8,5 @@ html,
 body,
 #root,
 .app {
-  @apply h-full w-full bg-myCream p-6 font-dmSans outline-dotted;
+  @apply h-full w-full bg-myCream p-6 font-dmSans;
 }

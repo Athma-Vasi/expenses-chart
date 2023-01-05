@@ -1,5 +1,4 @@
 import { type NextPage } from "next";
-import { useWindowInnerSize } from "../hooks/useWindowInnerSize";
 import logo from "../../public/logo.svg";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -7,11 +6,9 @@ import jsonData from "../data/data.json";
 import { v4 as uuidv4 } from "uuid";
 
 const Home: NextPage = () => {
-  const { width = 0 } = useWindowInnerSize();
-  const [finances, setFinances] =
-    useState<{ day: string; amount: number }[]>(jsonData);
-  // console.log(finances);
+  const [finances] = useState<{ day: string; amount: number }[]>(jsonData);
   const [currentDay, setCurrentDay] = useState("");
+  const [clickedDay, setClickedDay] = useState("");
   const [isBarClicked, setIsBarClicked] = useState(false);
   const [isBarMousedOver, setIsBarMousedOver] = useState(false);
 
@@ -19,17 +16,17 @@ const Home: NextPage = () => {
 
   const barHeightsFinances = finances.map(({ day, amount }) => {
     return {
-      height: Math.round(200 * (amount / largestExpense)),
+      height: Math.round(300 * (amount / largestExpense)),
       day,
       amount,
     };
   });
-  // console.log(barHeightsFinances);
 
   function handleBarOnClick(evt: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     const day = evt.currentTarget.dataset.day ?? "";
 
     setCurrentDay(day);
+    setClickedDay(day);
     setIsBarClicked((prev) => !prev);
   }
 
@@ -52,7 +49,7 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div className="grid h-full w-full grid-cols-1 grid-rows-5 place-content-center gap-y-4 font-sans outline-dashed">
+    <div className="mx-auto grid h-full w-full grid-cols-1 grid-rows-5 place-content-center gap-y-4 font-sans  md:w-3/5">
       {/* my balance */}
       <div className="col-span-1 row-span-1 flex flex-row items-center justify-between rounded-lg bg-softRed p-4">
         {/* amount */}
@@ -75,30 +72,37 @@ const Home: NextPage = () => {
         </h2>
 
         {/* bar chart */}
-        <div className="grid h-[500px] w-full grid-cols-7 items-center justify-center outline-double">
+        <div className="grid h-[500px] w-full grid-cols-7 items-center justify-center ">
           {barHeightsFinances.map(({ day, height, amount }) => (
             <div
               key={uuidv4()}
-              className="col-span-1 flex h-[400px] flex-col items-center justify-end gap-y-4 outline-dotted"
+              className="col-span-1 flex h-[400px] flex-col items-center justify-end gap-y-4 "
             >
-              {isBarClicked && day === currentDay && (
+              {/* amount that appears on top of bars */}
+              {isBarClicked && day === clickedDay && (
                 <p className="grid h-[30px] w-5/6 place-content-center rounded-md bg-darkBrown text-sm text-paleOrange shadow-lg shadow-darkBrown">
                   ${amount}
                 </p>
               )}
-              {isBarMousedOver && day === currentDay && !isBarClicked && (
+              {isBarMousedOver && day === currentDay && day !== clickedDay && (
                 <p className="grid h-[30px] w-5/6 place-content-center rounded-md bg-darkBrown text-sm text-paleOrange shadow-lg shadow-darkBrown">
                   ${amount}
                 </p>
               )}
+              {/* bar */}
               <div
-                className={`h-[${height}px] w-5/6 rounded-md bg-softRed ${
-                  !isBarClicked && day === currentDay && " hover:bg-lightRed"
+                className={`w-5/6 rounded-md bg-softRed transition duration-200 ${
+                  day === currentDay &&
+                  day !== clickedDay &&
+                  " shadow-md shadow-lightRed hover:bg-lightRed"
                 } ${
                   isBarClicked &&
-                  day === currentDay &&
+                  day === clickedDay &&
                   "bg-myCyan shadow-lg shadow-myCyan"
-                }`}
+                } `}
+                style={{
+                  height: `${height}px`,
+                }}
                 data-day={day}
                 onClick={handleBarOnClick}
                 onMouseEnter={handleBarMouseEnter}
@@ -110,7 +114,7 @@ const Home: NextPage = () => {
         </div>
 
         {/* totals */}
-        <div className="col-span-1 row-span-2 flex flex-row items-center justify-between border-t-2 border-medBrown">
+        <div className="col-span-1 row-span-2 flex flex-row items-center justify-between border-t-2 border-medBrown py-4 ">
           {/* left */}
           <div className="flex flex-col items-start justify-center">
             <p className="text-medBrown">Total this month</p>
