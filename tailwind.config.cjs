@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       colors: {
         softRed: "hsl(10, 79%, 65%)",
+        lightRed: "hsl(10, 85%, 75%)",
         myCyan: "hsl(186, 34%, 60%)",
         darkBrown: "hsl(25, 47%, 15%)",
         medBrown: "hsl(28, 10%, 53%)",
